@@ -8,8 +8,8 @@ locals {
 }
 
 resource "aws_vpc" "main-vpc" {
-  count       = var.create_vpc ? 1 : 0
-  cidr_block           = var.cidr_block 
+  count                = var.create_vpc ? 1 : 0
+  cidr_block           = var.cidr_block
   enable_dns_support   = var.enable_dns_support
   enable_dns_hostnames = var.enable_dns_hostnames
 
@@ -24,10 +24,10 @@ resource "aws_vpc" "main-vpc" {
 resource "aws_subnet" "private" {
   count = var.create_vpc && length(var.private_subnets) > 0 ? length(var.private_subnets) : 0
 
-  vpc_id                          = local.vpc_id
-  cidr_block                      = var.private_subnets[count.index]
-  availability_zone               = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
-  availability_zone_id            = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) == 0 ? element(var.azs, count.index) : null
+  vpc_id               = local.vpc_id
+  cidr_block           = var.private_subnets[count.index]
+  availability_zone    = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
+  availability_zone_id = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) == 0 ? element(var.azs, count.index) : null
 
   tags = merge(
     {
@@ -44,12 +44,12 @@ resource "aws_subnet" "private" {
 resource "aws_subnet" "public" {
   count = var.create_vpc && length(var.public_subnets) > 0 ? length(var.public_subnets) : 0
 
-  vpc_id                          = local.vpc_id
-  cidr_block                      = element(concat(var.public_subnets, [""]), count.index)
-  availability_zone               = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
-  availability_zone_id            = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) == 0 ? element(var.azs, count.index) : null
-  map_public_ip_on_launch         = var.map_public_ip_on_launch
-  
+  vpc_id                  = local.vpc_id
+  cidr_block              = element(concat(var.public_subnets, [""]), count.index)
+  availability_zone       = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) > 0 ? element(var.azs, count.index) : null
+  availability_zone_id    = length(regexall("^[a-z]{2}-", element(var.azs, count.index))) == 0 ? element(var.azs, count.index) : null
+  map_public_ip_on_launch = var.map_public_ip_on_launch
+
   tags = merge(
     {
       "Name" = format(
@@ -62,7 +62,7 @@ resource "aws_subnet" "public" {
   )
 }
 resource "aws_internet_gateway" "this" {
-  count       = var.create_vpc ? 1 : 0
+  count = var.create_vpc ? 1 : 0
 
   vpc_id = local.vpc_id
 
@@ -75,7 +75,7 @@ resource "aws_internet_gateway" "this" {
 }
 # Publiс routes
 resource "aws_route_table" "public" {
-  count       = var.create_vpc ? 1 : 0
+  count = var.create_vpc ? 1 : 0
 
   vpc_id = local.vpc_id
 
@@ -88,7 +88,7 @@ resource "aws_route_table" "public" {
   )
 }
 resource "aws_route" "public_internet_gateway" {
-  count       = var.create_vpc ? 1 : 0
+  count = var.create_vpc ? 1 : 0
 
   route_table_id         = aws_route_table.public[0].id
   destination_cidr_block = "0.0.0.0/0"

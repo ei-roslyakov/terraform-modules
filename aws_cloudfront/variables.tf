@@ -28,7 +28,7 @@ variable "private_zone" {
 variable "zone_name" {
   type        = string
   description = "The Hosted Zone name of the desired Hosted Zone"
-  default = ""
+  default     = ""
 }
 variable "bucket_name" {
   description = "Bucket_name"

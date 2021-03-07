@@ -56,7 +56,6 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
 
     s3_origin_config {
       origin_access_identity = join(" ", aws_cloudfront_origin_access_identity.access_identity.*.cloudfront_access_identity_path)
-      # origin_access_identity = aws_cloudfront_origin_access_identity.access_identity.*.cloudfront_access_identity_path
     }
   }
 
