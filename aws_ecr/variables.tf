@@ -1,27 +1,17 @@
-variable "enabled" {
-  type        = bool
-  description = "Set to false to prevent the module from creating any resources"
-  default     = true
-}
 variable "scan_images_on_push" {
   type        = bool
   description = "Indicates whether images are scanned after being pushed to the repository (true) or not (false)"
-  default     = false
+  default     = true
 }
-variable "repo_name" {
-  description = "Name for repository"
-  type    = list(string)
-  default = []
+variable "image_names" {
+  type        = list(string)
+  default     = []
+  description = "List of Docker local image names, used as repository names for AWS ECR "
 }
 variable "image_tag_mutability" {
   type        = string
-  default     = "MUTABLE"
+  default     = "IMMUTABLE"
   description = "The tag mutability setting for the repository. Must be one of: `MUTABLE` or `IMMUTABLE`"
-}
-variable "enable_lifecycle_policy" {
-  type        = bool
-  description = "Set to false to prevent the module from adding any lifecycle policies to any repositories"
-  default     = true
 }
 variable "protected_tags" {
   type        = set(string)
@@ -31,7 +21,7 @@ variable "protected_tags" {
 variable "max_image_count" {
   type        = number
   description = "How many Docker Image versions AWS ECR will store"
-  default     = 100
+  default     = 500
 }
 variable "tags" {
   description = "A mapping of tags to assign to all resources"

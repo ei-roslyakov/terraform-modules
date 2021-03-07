@@ -58,3 +58,8 @@ variable "map_public_ip_on_launch" {
   type        = bool
   default     = true
 }
+variable "public_route_table_tags" {
+  description = "Additional tags for the public route tables"
+  type        = map(string)
+  default     = {}
+}

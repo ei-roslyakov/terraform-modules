@@ -1,14 +1,7 @@
-output "repository_url_map" {
+output "ecr_repository_url_map" {
   value = zipmap(
-    values(aws_ecr_repository.repo)[*].name,
-    values(aws_ecr_repository.repo)[*].repository_url
+    values(aws_ecr_repository.ecr_repo)[*].name,
+    values(aws_ecr_repository.ecr_repo)[*].repository_url
   )
   description = "Map of repository names to repository URLs"
-}
-output "repository_arn_map" {
-  value = zipmap(
-    values(aws_ecr_repository.repo)[*].name,
-    values(aws_ecr_repository.repo)[*].arn
-  )
-  description = "Map of repository names to repository ARNs"
 }

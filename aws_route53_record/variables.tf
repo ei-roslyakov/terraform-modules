@@ -7,16 +7,22 @@ variable "enabled" {
 variable "name" {
   type        = string
   description = "The Name of the application or solution  (e.g. `bastion` or `portal`)"
+  default     = ""
 }
-
+variable "private_zone" {
+  type        = bool
+  default     = true
+  description = "Search filter for zone, if private set true"
+}
 variable "zone_name" {
-  type = string
+  type        = string
   description = "The Hosted Zone name of the desired Hosted Zone"
 }
 
 variable "records" {
   type        = list(string)
   description = "DNS records to create"
+  default     = ""
 }
 
 variable "type" {

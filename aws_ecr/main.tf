@@ -1,19 +1,3 @@
-resource "aws_ecr_repository" "repo" {
-  for_each             = toset(var.enabled ? var.repo_name : [])
-
-  name                 = each.value
-  image_tag_mutability = var.image_tag_mutability
-
-  image_scanning_configuration {
-    scan_on_push = var.scan_images_on_push
-  }
-  tags = merge(
-    {
-      "Name" = format("%s", each.value)
-    },
-    var.tags,
-  )
-}
 locals {
   untagged_image_rule = [{
     rulePriority = length(var.protected_tags) + 1
@@ -58,9 +42,28 @@ locals {
     }
   ]
 }
-resource "aws_ecr_lifecycle_policy" "repo_policy" {
-  for_each   = toset(var.enabled && var.enable_lifecycle_policy ? var.repo_name : [])
-  repository = aws_ecr_repository.repo[each.value].name
+
+resource "aws_ecr_repository" "ecr_repo" {
+  for_each = toset(var.image_names)
+
+  name                 = each.value
+  image_tag_mutability = var.image_tag_mutability
+
+  image_scanning_configuration {
+    scan_on_push = var.scan_images_on_push
+  }
+
+  tags = merge(
+    {
+      "Name" = format("%s", each.value)
+    },
+    var.tags,
+  )
+}
+
+resource "aws_ecr_lifecycle_policy" "ect_policy" {
+  for_each   = toset(var.image_names)
+  repository = aws_ecr_repository.ecr_repo[each.value].name
 
   policy = jsonencode({
     rules = concat(local.protected_tag_rules, local.untagged_image_rule, local.remove_old_image_rule)
