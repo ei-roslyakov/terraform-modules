@@ -21,7 +21,11 @@ module "vpc" {
     Terraform = "true"
     Environment = "test"
   }
+  private_subnet_tags = {
+    Tier = "private"
+  }
+  public_subnet_tags = {
+    Tier = "public"
+  }
 }
 ```
-
-Based on https://github.com/terraform-aws-modules/terraform-aws-vpc
