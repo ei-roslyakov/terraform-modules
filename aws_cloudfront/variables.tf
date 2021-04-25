@@ -8,6 +8,16 @@ variable "aliases" {
   type        = list(string)
   default     = null
 }
+variable "create_record" {
+  description = "Controls if route53 record resources should be created"
+  type        = bool
+  default     = false
+}
+variable "evaluate_target_health" {
+  description = "Set to true if you want Route 53 to determine whether to respond to DNS queries using this resource record set by checking the health of the resource record set. Some resources have special requirements"
+  type        = bool
+  default     = false
+}
 variable "viewer_certificate" {
   description = "The SSL configuration for this distribution"
   type        = any
@@ -97,6 +107,28 @@ variable "smooth_streaming" {
 variable "minimum_protocol_version" {
   description = "The minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections"
   default     = "TLSv1.2_2019"
+}
+variable "logging_enabled" {
+  type        = bool
+  default     = true
+  description = "When true, access logs will be sent to a newly created s3 bucket"
+}
+
+variable "log_include_cookies" {
+  type        = bool
+  default     = false
+  description = "Include cookies in access logs"
+}
+
+variable "log_prefix" {
+  type        = string
+  default     = ""
+  description = "Path of logs in S3 bucket"
+}
+
+variable "log_bucket_fqdn" {
+  default     = ""
+  description = "Optional fqdn of logging bucket, if not supplied a bucket will be generated."
 }
 variable "tags" {
   type    = map(string)

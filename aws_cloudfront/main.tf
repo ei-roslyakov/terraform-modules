@@ -15,12 +15,15 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   http_version    = var.http_version
   is_ipv6_enabled = var.is_ipv6_enabled
   price_class     = var.price_class
-  tags = merge(
-    {
-      "Name" = format("%s", local.s3_origin_id)
-    },
-    var.tags,
-  )
+
+  dynamic "logging_config" {
+      for_each = var.logging_enabled ? ["true"] : []
+      content {
+        include_cookies = var.log_include_cookies
+        bucket          = join(" ", var.log_bucket_fqdn)
+        prefix          = var.log_prefix
+      }
+    }
 
   default_cache_behavior {
     allowed_methods        = var.allowed_methods
@@ -56,6 +59,7 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
 
     s3_origin_config {
       origin_access_identity = join(" ", aws_cloudfront_origin_access_identity.access_identity.*.cloudfront_access_identity_path)
+      # origin_access_identity = aws_cloudfront_origin_access_identity.access_identity.*.cloudfront_access_identity_path
     }
   }
 
@@ -74,6 +78,13 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     minimum_protocol_version       = lookup(var.viewer_certificate, "minimum_protocol_version", "TLSv1.2_2019")
     ssl_support_method             = lookup(var.viewer_certificate, "ssl_support_method", null)
   }
+
+  tags = merge(
+    {
+      "Name" = format("%s", local.s3_origin_id)
+    },
+    var.tags,
+  )
 
   depends_on = [aws_cloudfront_origin_access_identity.access_identity]
 }
