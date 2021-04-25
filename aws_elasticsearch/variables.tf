@@ -57,7 +57,8 @@ variable "source_security_groups" {
   default     = ""
 }
 variable "elasticsearch_version" {
-  default = 7.7
+  type    = string
+  default = "7.4"
 }
 variable "instance_type" {
   default = "t2.medium.elasticsearch"
@@ -95,15 +96,10 @@ variable "tg_unhealthy_alarm_actions" {
 variable "treat_missing_data" {
   default = "breaching"
 }
-variable "jenkins_cidr" {
-  description = "The Jenkins subnet CIDR block"
-  type        = string
-  default     = ""
-}
-variable "jenkins_acces" {
-  description = "Create ingress role for Jenkins?"
-  type        = bool
-  default     = false
+variable "allowed_cidr_blocks" {
+  type        = list(string)
+  default     = []
+  description = "List of CIDR blocks allowed to access the cluster"
 }
 variable "region" {
   description = "AWS region"

@@ -72,9 +72,4 @@ CONFIG
     },
     var.tags,
   )
-  lifecycle {
-    ignore_changes = [
-      elasticsearch_version
-    ]
-  }
 }

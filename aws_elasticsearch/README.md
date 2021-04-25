@@ -6,7 +6,7 @@ module "aws_elasticsearch" {
 
   create_elasticsearch            = true  
   enabling_cloudwatch_monitoring  = true # create cloudwatch alarms
-  jenkins_access                  = false # create sq rule for access from ip
+  allowed_cidr_blocks             = "192.168.1.0/24"
   es_domain_name                  = "cluster_domain_name"
   zone_awareness_enabled          = false
   instance_count                  = "1"

@@ -22,14 +22,14 @@ resource "aws_security_group_rule" "ingress_security_groups" {
   security_group_id        = join("", aws_security_group.es_security_group.*.id)
 }
 
-resource "aws_security_group_rule" "jenkins_acces" {
-  count             = var.jenkins_acces ? 1 : 0
-  description       = "Allow inbound traffic from Jenkins"
+resource "aws_security_group_rule" "ingress_cidr_blocks" {
+  count             = var.create_elasticsearch && length(var.allowed_cidr_blocks) > 0 ? 1 : 0
+  description       = "Allow inbound traffic from existing CIDR blocks"
   type              = "ingress"
   from_port         = var.elasticsearch_port
   to_port           = var.elasticsearch_port
   protocol          = "tcp"
-  cidr_blocks       = [var.jenkins_cidr]
+  cidr_blocks       = var.allowed_cidr_blocks
   security_group_id = join("", aws_security_group.es_security_group.*.id)
 }
 
