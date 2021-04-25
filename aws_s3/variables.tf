@@ -66,3 +66,23 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+variable "logging" {
+  description = "Map containing access bucket logging configuration."
+  type        = map(string)
+  default     = {}
+}
+variable "replication_configuration" {
+  description = "Map containing cross-region replication configuration."
+  type        = any
+  default     = {}
+}
+variable "server_side_encryption_configuration" {
+  description = "Map containing server-side encryption configuration."
+  type        = any
+  default     = {}
+}
+variable "object_lock_configuration" {
+  description = "Map containing S3 object locking configuration."
+  type        = any
+  default     = {}
+}
