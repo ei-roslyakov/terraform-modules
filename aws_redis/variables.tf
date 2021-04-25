@@ -89,15 +89,10 @@ variable "subnets" {
   description = "Subnet IDs"
   default     = []
 }
-variable "jenkins_cidr" {
-  description = "The Jenkins subnet CIDR block"
-  type        = string
-  default     = ""
-}
-variable "jenkins_acces" {
-  description = "Create ingress role for Jenkins?"
-  type        = bool
-  default     = false
+variable "allowed_cidr_blocks" {
+  type        = list(string)
+  default     = []
+  description = "List of CIDR blocks allowed to access the cluster"
 }
 variable "vpc_id" {
   type        = string

@@ -1,6 +1,6 @@
 locals {
-  redis_subnet_group_tag_name = format("%s-%s", var.elasticache_clustes_name, "redis-subnet")
-  replication_group_id        = format("%s-%s", var.elasticache_clustes_name, "redis")
+  redis_subnet_group_tag_name = format("%s-%s", var.elasticache_clustes_name, "subnet")
+  replication_group_id        = format("%s", var.elasticache_clustes_name)
   elasticache_member_clusters = var.create_elasticache ? tolist(aws_elasticache_replication_group.redis_replication_group.0.member_clusters) : []
 }
 
