@@ -2,7 +2,7 @@
 
 ```hcl
 module "s3_bucket" {
-  source = "git@github.com:Sphere-Research/sph-tf-modules.git//aws_s3"
+  source = "./aws_s3"
 
   create_bucket = var.create_bucket
 
