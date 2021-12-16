@@ -47,6 +47,32 @@ variable "bucket_name" {
 variable "s3_origin_id" {
   default = ""
 }
+variable "origin_path" {
+  # http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesOriginPath
+  type        = string
+  description = "An optional element that causes CloudFront to request your content from a directory in your Amazon S3 bucket or your custom origin. It must begin with a /. Do not add a / at the end of the path."
+  default     = ""
+}
+variable "custom_header" {
+  type = list(object({
+    name  = string
+    value = string
+  }))
+
+  description = "List of one or more custom headers passed to the origin"
+  default     = []
+}
+variable "cache_policy_id" {
+  type        = string
+  default     = null
+  description = "ID of the cache policy attached to the cache behavior"
+}
+
+variable "origin_request_policy_id" {
+  type        = string
+  default     = null
+  description = "ID of the origin request policy attached to the cache behavior"
+}
 variable "bucket_regional_domain_name" {
   description = "The bucket region-specific domain name. The bucket domain name including the region name, please refer here for format. Note: The AWS CloudFront allows specifying S3 region-specific endpoint when creating S3 origin, it will prevent redirect issues from CloudFront to S3 Origin URL."
   default     = ""
@@ -88,18 +114,6 @@ variable "compress" {
   description = "Whether you want CloudFront to automatically compress content for web requests that include Accept-Encoding: gzip in the request header (default: false)."
   default     = true
 }
-variable "default_ttl" {
-  description = "The default amount of time (in seconds) that an object is in a CloudFront cache before CloudFront forwards another request in the absence of an Cache-Control max-age or Expires header"
-  default     = 86400
-}
-variable "max_ttl" {
-  description = "The maximum amount of time (in seconds) that an object is in a CloudFront cache before CloudFront forwards another request to your origin to determine whether the object has been updated. Only effective in the presence of Cache-Control max-age, Cache-Control s-maxage, and Expires headers."
-  default     = 31536000
-}
-variable "min_ttl" {
-  description = "The minimum amount of time that you want objects to stay in CloudFront caches before CloudFront queries your origin to see whether the object has been updated. Defaults to 0 seconds."
-  default     = 0
-}
 variable "smooth_streaming" {
   description = "Indicates whether you want to distribute media files in Microsoft Smooth Streaming format using the origin that is associated with this cache behavior."
   default     = false
@@ -108,29 +122,48 @@ variable "minimum_protocol_version" {
   description = "The minimum version of the SSL protocol that you want CloudFront to use for HTTPS connections"
   default     = "TLSv1.2_2019"
 }
-variable "logging_enabled" {
-  type        = bool
-  default     = true
-  description = "When true, access logs will be sent to a newly created s3 bucket"
+variable "logging_config" {
+  description = "The logging configuration that controls how logs are written to your distribution (maximum one)."
+  type        = any
+  default     = {}
 }
-
-variable "log_include_cookies" {
-  type        = bool
-  default     = false
-  description = "Include cookies in access logs"
+variable "headers_cache_keys" {
+  description = "Specifies the cache headers for default cache behavior."
+  type        = list(string)
+  default     = []
 }
-
-variable "log_prefix" {
-  type        = string
-  default     = ""
-  description = "Path of logs in S3 bucket"
-}
-
-variable "log_bucket_fqdn" {
-  default     = ""
-  description = "Optional fqdn of logging bucket, if not supplied a bucket will be generated."
+variable "realtime_logging_config" {
+  description = "The real-time log configuration that is attached to cache behavior."
+  type = object({
+    name               = string
+    sampling_rate      = number
+    fields             = list(string)
+    kinesis_stream_arn = string
+  })
+  default = null
 }
 variable "tags" {
   type    = map(string)
   default = {}
+}
+variable "forward_headers" {
+  description = "Specifies the Headers, if any, that you want CloudFront to vary upon for this cache behavior. Specify `*` to include all headers."
+  type        = list(string)
+  default     = []
+}
+variable "forward_query_string" {
+  type        = bool
+  default     = false
+  description = "Forward query strings to the origin that is associated with this cache behavior"
+}
+variable "forward_cookies" {
+  type        = string
+  description = "Specifies whether you want CloudFront to forward cookies to the origin. Valid options are all, none or whitelist"
+  default     = "none"
+}
+
+variable "forward_cookies_whitelisted_names" {
+  type        = list(string)
+  description = "List of forwarded cookie names"
+  default     = []
 }

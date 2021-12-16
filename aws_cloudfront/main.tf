@@ -17,38 +17,39 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   price_class     = var.price_class
 
   dynamic "logging_config" {
-      for_each = var.logging_enabled ? ["true"] : []
-      content {
-        include_cookies = var.log_include_cookies
-        bucket          = join(" ", var.log_bucket_fqdn)
-        prefix          = var.log_prefix
-      }
+    for_each = length(keys(var.logging_config)) == 0 ? [] : [var.logging_config]
+
+    content {
+      bucket          = logging_config.value["bucket"]
+      prefix          = lookup(logging_config.value, "prefix", null)
+      include_cookies = lookup(logging_config.value, "include_cookies", null)
     }
+  }
 
   default_cache_behavior {
-    allowed_methods        = var.allowed_methods
-    cached_methods         = var.cached_methods
-    compress               = var.compress
-    default_ttl            = var.default_ttl
-    max_ttl                = var.max_ttl
-    min_ttl                = var.min_ttl
-    smooth_streaming       = var.smooth_streaming
-    target_origin_id       = local.s3_origin_id
-    trusted_signers        = []
-    viewer_protocol_policy = var.viewer_protocol_policy
+    allowed_methods          = var.allowed_methods
+    cached_methods           = var.cached_methods
+    compress                 = var.compress
+    cache_policy_id          = var.cache_policy_id
+    origin_request_policy_id = var.origin_request_policy_id
+    smooth_streaming         = var.smooth_streaming
+    target_origin_id         = local.s3_origin_id
+    trusted_signers          = []
+    viewer_protocol_policy   = var.viewer_protocol_policy
+    realtime_log_config_arn  = try(join("", aws_cloudfront_realtime_log_config.realtime_log.*.arn), null)
 
-    forwarded_values {
-      headers = [
-        "Access-Control-Request-Headers",
-        "Access-Control-Request-Method",
-        "Origin",
-      ]
-      query_string            = false
-      query_string_cache_keys = []
+    dynamic "forwarded_values" {
+      # If a cache policy or origin request policy is specified, we cannot include a `forwarded_values` block at all in the API request
+      for_each = try(coalesce(var.cache_policy_id), null) == null && try(coalesce(var.origin_request_policy_id), null) == null ? [true] : []
+      content {
+        headers = var.forward_headers
 
-      cookies {
-        forward           = "none"
-        whitelisted_names = []
+        query_string = var.forward_query_string
+
+        cookies {
+          forward           = var.forward_cookies
+          whitelisted_names = var.forward_cookies_whitelisted_names
+        }
       }
     }
   }
@@ -56,11 +57,20 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   origin {
     domain_name = join(" ", var.bucket_regional_domain_name)
     origin_id   = local.s3_origin_id
+    origin_path = var.origin_path
 
     s3_origin_config {
       origin_access_identity = join(" ", aws_cloudfront_origin_access_identity.access_identity.*.cloudfront_access_identity_path)
-      # origin_access_identity = aws_cloudfront_origin_access_identity.access_identity.*.cloudfront_access_identity_path
     }
+
+    dynamic "custom_header" {
+      for_each = var.custom_header
+      content {
+        name  = custom_header.value.name
+        value = custom_header.value.value
+      }
+    }
+
   }
 
   restrictions {
@@ -107,3 +117,63 @@ resource "aws_s3_bucket_policy" "s3_policy" {
   policy = data.aws_iam_policy_document.s3_policy_documen.json
 }
 
+resource "aws_iam_role" "cloudfront_realtime_log_role" {
+  count = var.realtime_logging_config == null ? 0 : 1
+
+  name = "${var.realtime_logging_config.name}-role"
+  tags = var.tags
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "CloudFrontRealTimeLogAssumeRole"
+        Effect = "Allow"
+        Action = [
+          "sts:AssumeRole"
+        ]
+        Principal = {
+          "Service" = "cloudfront.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  inline_policy {
+    name = "default"
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Effect = "Allow"
+          Action = [
+            "kinesis:DescribeStreamSummary",
+            "kinesis:DescribeStream",
+            "kinesis:PutRecord",
+            "kinesis:PutRecords"
+          ]
+          Resource = [
+            var.realtime_logging_config.kinesis_stream_arn
+          ]
+        }
+      ]
+    })
+  }
+}
+
+resource "aws_cloudfront_realtime_log_config" "realtime_log" {
+  count = var.realtime_logging_config == null ? 0 : 1
+
+  name          = var.realtime_logging_config.name
+  sampling_rate = var.realtime_logging_config.sampling_rate
+  fields        = var.realtime_logging_config.fields
+
+  endpoint {
+    stream_type = "Kinesis"
+
+    kinesis_stream_config {
+      role_arn   = aws_iam_role.cloudfront_realtime_log_role[count.index].arn
+      stream_arn = var.realtime_logging_config.kinesis_stream_arn
+    }
+  }
+}

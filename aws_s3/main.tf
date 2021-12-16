@@ -56,6 +56,7 @@ resource "aws_s3_bucket" "bucket" {
       abort_incomplete_multipart_upload_days = lookup(lifecycle_rule.value, "abort_incomplete_multipart_upload_days", null)
       enabled                                = lifecycle_rule.value.enabled
 
+      # Max 1 block - expiration
       dynamic "expiration" {
         for_each = length(keys(lookup(lifecycle_rule.value, "expiration", {}))) == 0 ? [] : [lookup(lifecycle_rule.value, "expiration", {})]
 
@@ -66,6 +67,7 @@ resource "aws_s3_bucket" "bucket" {
         }
       }
 
+      # Several blocks - transition
       dynamic "transition" {
         for_each = lookup(lifecycle_rule.value, "transition", [])
 
@@ -76,6 +78,7 @@ resource "aws_s3_bucket" "bucket" {
         }
       }
 
+      # Max 1 block - noncurrent_version_expiration
       dynamic "noncurrent_version_expiration" {
         for_each = length(keys(lookup(lifecycle_rule.value, "noncurrent_version_expiration", {}))) == 0 ? [] : [lookup(lifecycle_rule.value, "noncurrent_version_expiration", {})]
 
@@ -84,6 +87,7 @@ resource "aws_s3_bucket" "bucket" {
         }
       }
 
+      # Several blocks - noncurrent_version_transition
       dynamic "noncurrent_version_transition" {
         for_each = lookup(lifecycle_rule.value, "noncurrent_version_transition", [])
 
@@ -95,6 +99,7 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
   
+  # Max 1 block - replication_configuration
   dynamic "replication_configuration" {
     for_each = length(keys(var.replication_configuration)) == 0 ? [] : [var.replication_configuration]
 
@@ -144,6 +149,7 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
 
+  # Max 1 block - server_side_encryption_configuration
   dynamic "server_side_encryption_configuration" {
     for_each = length(keys(var.server_side_encryption_configuration)) == 0 ? [] : [var.server_side_encryption_configuration]
 
@@ -168,6 +174,7 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
 
+  # Max 1 block - object_lock_configuration
   dynamic "object_lock_configuration" {
     for_each = length(keys(var.object_lock_configuration)) == 0 ? [] : [var.object_lock_configuration]
 
