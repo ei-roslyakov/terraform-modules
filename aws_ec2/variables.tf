@@ -119,3 +119,27 @@ variable "create_default_security_group" {
   description = "Create default Security Group with only Egress traffic allowed"
   default     = "true"
 }
+#############
+## CW ALARM ##
+##############
+variable "tg_unhealthy_ok_actions" {
+  description = "arn for sns topic"
+  default     = ""
+}
+variable "tg_unhealthy_alarm_actions" {
+  description = "arn for sns topic"
+  default     = ""
+}
+variable "treat_missing_data" {
+  default = "breaching"
+}
+variable "cpu_threshold" {
+  type        = number
+  description = "CPU Utilization Threshold"
+  default     = 0
+}
+variable "cpu_credit_threshold" {
+  type        = number
+  description = "CPU Credit Amount Threshold"
+  default     = 0
+}
