@@ -41,13 +41,13 @@ data "aws_iam_policy_document" "default" {
 }
 
 resource "aws_iam_instance_profile" "default" {
-  count = local.instance_count
+  count = var.iam_instance_profile == "" ? 1 : 0
   name  = "${var.name}-role"
   role  = join("", aws_iam_role.default.*.name)
 }
 
 resource "aws_iam_role" "default" {
-  count              = local.instance_count
+  count              = var.iam_instance_profile == "" ? 1 : 0
   name               = "${var.name}-role"
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.default.json
@@ -60,7 +60,7 @@ resource "aws_instance" "default" {
   user_data                            = var.user_data
   key_name                             = var.ssh_key_pair
   monitoring                           = var.monitoring
-  iam_instance_profile                 = join("", aws_iam_instance_profile.default.*.name)
+  iam_instance_profile                 = try(var.iam_instance_profile, join("", aws_iam_instance_profile.default.*.name))
   associate_public_ip_address          = var.associate_public_ip_address
   subnet_id                            = var.subnet_id
   private_ip                           = var.private_ip
