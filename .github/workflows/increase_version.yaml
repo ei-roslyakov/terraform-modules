@@ -15,6 +15,7 @@ jobs:
       - name: Get current version
         run: |
           ls -al
+          git pull
 
       - name: Get current version
         run: |
