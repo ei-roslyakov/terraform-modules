@@ -31,3 +31,6 @@ jobs:
         working-directory: ${{matrix.dir}}
         run: |
           ls -al
+          tfswitch
+          terraform init -backend=false
+          terraform validate
