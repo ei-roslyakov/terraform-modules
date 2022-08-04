@@ -1,0 +1,18 @@
+name: Version Increment
+
+on:
+  workflow_dispatch
+  # push:
+  #   branches: [master]
+
+jobs:
+  log-the-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current version
+        run: |
+          echo "current_version=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+
+      - name: Print current version
+        run: |
+          echo "${{ env.current_version }}"
