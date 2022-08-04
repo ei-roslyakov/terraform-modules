@@ -11,12 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        run: git fetch --prune --unshallow
       
-      - name: Get current version
-        run: |
-          ls -al
-          git pull
-
       - name: Get current version
         run: |
           echo "current_version=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
