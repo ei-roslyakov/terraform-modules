@@ -19,7 +19,6 @@ jobs:
     continue-on-error: true
     needs: [directories]
     strategy:
-      max-parallel: 2
       matrix:
         dir: ${{fromJson(needs.directories.outputs.dir)}} 
     steps:
