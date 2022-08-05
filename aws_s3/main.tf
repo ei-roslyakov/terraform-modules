@@ -98,7 +98,7 @@ resource "aws_s3_bucket" "bucket" {
       }
     }
   }
-  
+
   # Max 1 block - replication_configuration
   dynamic "replication_configuration" {
     for_each = length(keys(var.replication_configuration)) == 0 ? [] : [var.replication_configuration]
@@ -207,7 +207,7 @@ resource "aws_s3_bucket" "bucket" {
       replication_configuration,
     ]
   }
-  
+
 }
 
 resource "aws_s3_bucket_public_access_block" "s3_public_access_block" {

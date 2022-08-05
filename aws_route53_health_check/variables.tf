@@ -15,7 +15,7 @@ variable "port" {
 
 variable "type" {
   description = "The protocol to use when performing health checks. Valid values are HTTP, HTTPS, HTTP_STR_MATCH, HTTPS_STR_MATCH, TCP, CALCULATED and CLOUDWATCH_METRIC"
-  default = ""
+  default     = ""
 }
 
 variable "resource_path" {
@@ -25,32 +25,32 @@ variable "resource_path" {
 
 variable "failure_threshold" {
   description = "The number of consecutive health checks that an endpoint must pass or fail"
-  default = ""
+  default     = ""
 }
 
 variable "request_interval" {
   description = "The number of seconds between the time that Amazon Route 53 gets a response from your endpoint and the time that it sends the next health-check request."
-  default = ""
+  default     = ""
 }
 
 variable "cloudwatch_alarm_region" {
   description = "The CloudWatchRegion that the CloudWatch alarm was created in."
-  default = ""
+  default     = ""
 }
 
 variable "ok_actions" {
   description = "The list of actions to execute when this alarm transitions into an OK state from any other state. Each action is specified as an Amazon Resource Name (ARN)"
-  default = ""
+  default     = ""
 }
 
 variable "alarm_actions" {
   description = "The list of actions to execute when this alarm transitions into an ALARM state from any other state. Each action is specified as an Amazon Resource Name (ARN)"
-  default = ""
+  default     = ""
 }
 
 variable "insufficient_data_actions" {
   description = "The list of actions to execute when this alarm transitions into an INSUFFICIENT_DATA state from any other state. Each action is specified as an Amazon Resource Name (ARN)"
-  default = ""
+  default     = ""
 }
 
 variable "tags" {

@@ -24,7 +24,7 @@ resource "aws_cloudwatch_metric_alarm" "alarm" {
   statistic           = "Minimum"
   threshold           = "1"
 
-  dimensions                = {
+  dimensions = {
     "HealthCheckId" = aws_route53_health_check.check.id
   }
 
