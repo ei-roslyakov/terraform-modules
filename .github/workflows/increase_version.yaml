@@ -11,9 +11,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
         
-      - name: Get tags
-        run: git fetch --tags origin
+      # - name: Get tags
+      #   run: git fetch --tags origin
       
       - name: Get current version
         run: |
@@ -23,9 +25,8 @@ jobs:
         run: |
           echo "${{ env.current_version }}"
 
-      - name:  'Automated Version Bump'
-        uses:  'phips28/gh-action-bump-version@master'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag-prefix:  'v'
+          WITH_V: true
