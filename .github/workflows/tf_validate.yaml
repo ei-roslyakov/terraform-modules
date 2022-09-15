@@ -19,7 +19,7 @@ jobs:
     needs: [directories]
     strategy:
       matrix:
-        dir: ${{fromJson(needs.directories.outputs.dir)}} 
+        dir: ${{fromJson(needs.directories.outputs.dir)}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
