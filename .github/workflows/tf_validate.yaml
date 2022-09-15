@@ -19,7 +19,9 @@ jobs:
     needs: [directories]
     strategy:
       matrix:
-        dir: ${{fromJson(needs.directories.outputs.dir)}} 
+        dir: ${{fromJson(needs.directories.outputs.dir)}}
+        exclude:
+          - dir: "aws_acm/"
     steps:
       - name: Checkout
         uses: actions/checkout@v2

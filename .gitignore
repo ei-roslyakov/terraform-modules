@@ -35,3 +35,23 @@ override.tf.json
 
 #temp folders
 **/temp/*
+
+#terragrunt
+.*.sw?
+.idea
+terragrunt.iml
+vendor
+.terraform
+.vscode
+*.tfstate
+*.tfstate.backup
+*.out
+.terragrunt-cache
+.bundle
+.ruby-version
+.terraform.lock.hcl
+terragrunt
+*.zip
+
+#common
+**/.DS_Store
