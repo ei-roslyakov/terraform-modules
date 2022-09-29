@@ -21,11 +21,11 @@ jobs:
 
   module:
     runs-on: ubuntu-latest
-    continue-on-error: false
+    # continue-on-error: false
     needs: [directories]
-    strategy:
-      matrix:
-        dir: ${{fromJson(needs.directories.outputs.dir)}}
+    # strategy:
+    #   matrix:
+    #     dir: ${{fromJson(needs.directories.outputs.dir)}}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,11 +34,16 @@ jobs:
         uses: ./.github/actions/install-terraform-docs
         with:
           tfd_version: ${{ env.TFD_VERSION }}
+      
+      - name: Make docs
+        run: |
+          for item in ${{fromJson(needs.directories.outputs.dir)}}; do /usr/local/terraform-docs markdown table --output-file ${{ env.OUTPUT_FILE }} --output-mode ${{ env.OUTPUT_MODE }} $item
 
-      - name: Make docs for ${{matrix.dir}}
-        uses: ./.github/actions/make-terraform-docs
-        with:
-          module_path: ${{matrix.dir}}
-          output_mode: ${{ env.OUTPUT_MODE }}
-          output_file: ${{ env.OUTPUT_FILE }}
+      # - name: Make docs for ${{matrix.dir}}
+      #   uses: ./.github/actions/make-terraform-docs
+      #   with:
+      #     module_path: ${{matrix.dir}}
+      #     output_mode: ${{ env.OUTPUT_MODE }}
+      #     output_file: ${{ env.OUTPUT_FILE }}
+      
 
