@@ -19,6 +19,6 @@ runs:
   steps:
     - name: Make README
       run: |
-        terraform-docs markdown table --output-file {{ inputs.output_file }} --output-mode {{ inputs.output_mode }} {{ inputs.module_path }}
+        /usr/local/terraform-docs markdown table --output-file {{ inputs.output_file }} --output-mode {{ inputs.output_mode }} {{ inputs.module_path }}
       shell: bash
 
