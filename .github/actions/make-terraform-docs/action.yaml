@@ -1,0 +1,24 @@
+name: "Make readme"
+description: "Make readme for TF module"
+
+inputs:
+  module_path:
+    description: "path to module"
+    required: true
+  output_mode:
+    description: "Output mode"
+    required: false
+    default: "inject"
+  output_file:
+    description: "Output file"
+    required: false
+    default: "README.md"
+
+runs:
+  using: composite
+  steps:
+    - name: Make README
+      run: |
+        terraform-docs markdown table --output-file {{ inputs.output_file }} --output-mode {{ inputs.output_mode }} {{ inputs.module_path }}
+      shell: bash
+

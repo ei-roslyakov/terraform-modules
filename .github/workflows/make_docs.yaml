@@ -1,0 +1,44 @@
+name: Make docs
+
+on:
+  workflow_dispatch:
+
+env:
+  TFD_VERSION : "v0.16.0"
+  OUTPUT_MODE : "inject"
+  OUTPUT_FILE : "README.md"
+
+
+jobs:
+  directories:
+    runs-on: ubuntu-latest
+    outputs:
+      dir: ${{ steps.set-dirs.outputs.dir }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: set-dirs
+        run: echo "::set-output name=dir::$(ls -d */ | jq -R -s -c 'split("\n")[:-1]')"
+
+  module:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [directories]
+    strategy:
+      matrix:
+        dir: ${{fromJson(needs.directories.outputs.dir)}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install terraform docs
+        uses: ./.github/actions/install-terraform-docs
+        with:
+          tfd_version: ${{ env.TFD_VERSION }}
+
+      - name: Make docs for ${{matrix.dir}}
+        uses: ./.github/actions/make-terraform-docs
+        with:
+          module_path: ${{matrix.dir}}
+          output_mode: ${{ env.OUTPUT_MODE }}
+          output_file: ${{ env.OUTPUT_FILE }}
+
