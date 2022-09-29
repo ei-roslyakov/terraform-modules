@@ -37,3 +37,36 @@ inputs = {
   }
 }
 ```
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.0 |
+
+## Providers
+
+No providers.
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_group"></a> [group](#module\_group) | ./iam_group_with_policies | n/a |
+
+## Resources
+
+No resources.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_groups"></a> [groups](#input\_groups) | A map of users with parameters | <pre>map(object({<br>    name              = optional(string)<br>    path              = optional(string)<br>    group_users       = optional(list(string))<br>    group_policy_arns = optional(list(string))<br>  }))</pre> | `{}` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. `map('BusinessUnit','XYZ')` | `map(string)` | `{}` | no |
+
+## Outputs
+
+No outputs.
+<!-- END_TF_DOCS -->

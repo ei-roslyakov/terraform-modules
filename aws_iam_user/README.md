@@ -39,3 +39,40 @@ inputs = {
   }
 }
 ```
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.2.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4 |
+
+## Providers
+
+No providers.
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_user"></a> [user](#module\_user) | ./iam_user | n/a |
+
+## Resources
+
+No resources.
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. `map('BusinessUnit','XYZ')` | `map(string)` | `{}` | no |
+| <a name="input_users"></a> [users](#input\_users) | A map of users with parameters | <pre>map(object({<br>    name                    = optional(string)<br>    path                    = optional(string)<br>    permissions_boundary    = optional(string)<br>    force_destroy           = optional(bool)<br>    password_reset_required = optional(bool)<br>    password_length         = optional(string)<br>    custom_tags             = optional(map(string))<br>    policy                  = optional(list(string))<br>  }))</pre> | `{}` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_user_name_with_arn"></a> [user\_name\_with\_arn](#output\_user\_name\_with\_arn) | IAM user name |
+| <a name="output_user_name_with_password"></a> [user\_name\_with\_password](#output\_user\_name\_with\_password) | IAM user name |
+| <a name="output_user_name_with_unique_id"></a> [user\_name\_with\_unique\_id](#output\_user\_name\_with\_unique\_id) | IAM user name |
+<!-- END_TF_DOCS -->

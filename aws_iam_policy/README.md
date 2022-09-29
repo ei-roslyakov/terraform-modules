@@ -39,3 +39,41 @@ inputs = {
   }
 }
 ```
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.2.7 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_iam_policy.policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_policies"></a> [policies](#input\_policies) | A map of policies with parameters | <pre>map(object({<br>    name        = optional(string)<br>    path        = optional(string)<br>    policy_path = optional(string)<br>    custom_tags = optional(map(string))<br>  }))</pre> | `{}` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. `map('BusinessUnit','XYZ')` | `map(string)` | `{}` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_policy_name_with_arn"></a> [policy\_name\_with\_arn](#output\_policy\_name\_with\_arn) | IAM user name |
+| <a name="output_policy_name_with_id"></a> [policy\_name\_with\_id](#output\_policy\_name\_with\_id) | IAM user name |
+<!-- END_TF_DOCS -->
