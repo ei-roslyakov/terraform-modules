@@ -37,7 +37,7 @@ jobs:
       
       - name: Make docs
         run: |
-          for item in ${{fromJson(needs.directories.outputs.dir)}}; do /usr/local/terraform-docs markdown table --output-file ${{ env.OUTPUT_FILE }} --output-mode ${{ env.OUTPUT_MODE }} {$item}; done
+          for item in ${{fromJson(needs.directories.outputs.dir)}}; do /usr/local/terraform-docs markdown table --output-file ${{ env.OUTPUT_FILE }} --output-mode ${{ env.OUTPUT_MODE }} ${item}; done
 
       # - name: Make docs for ${{matrix.dir}}
       #   uses: ./.github/actions/make-terraform-docs
