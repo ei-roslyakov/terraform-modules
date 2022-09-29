@@ -16,4 +16,3 @@ runs:
         chmod +x terraform-docs
         sudo mv terraform-docs /usr/local/terraform-docs
       shell: bash
-
