@@ -48,8 +48,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        # with:
-        #   ref: ${{ github.base_ref }}
+        with:
+          ref: "testing"
 
       - name: Install terraform docs
         uses: ./.github/actions/install-terraform-docs
