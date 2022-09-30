@@ -65,9 +65,22 @@ jobs:
             fi
           done
 
-      - name: Commit & Push changes
-        uses: actions-js/push@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: "Modified README.md"
-          branch: ${{ github.event.pull_request.head.ref }}
+      # - name: Commit & Push changes
+      #   uses: actions-js/push@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     message: "Modified README.md"
+      #     branch: ${{ github.event.pull_request.head.ref }}
+
+      - name: Check for modified files
+        id: git-check
+        run: echo ::set-output name=modified::$(if [ -n "$(git status --porcelain)" ]; then echo "true"; else echo "false"; fi)
+
+      - name: Update changes in GitHub repository
+        if: steps.git-check.outputs.modified == 'true'
+        run:  |
+          git config --global user.name 'Terraform Docs maker' 
+          git config --global user.email 'noreply@amo.tech'
+          git add -A
+          git commit -m '[automated commit] add docs generated using terraform-docs'
+          git push
