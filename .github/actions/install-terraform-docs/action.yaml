@@ -15,4 +15,5 @@ runs:
         tar -xzf terraform-docs.tar.gz
         chmod +x terraform-docs
         sudo mv terraform-docs /usr/local/terraform-docs
+        rm README.md
       shell: bash

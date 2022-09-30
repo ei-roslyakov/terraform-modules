@@ -46,15 +46,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: [loop]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: "testing"
-
       - name: Install terraform docs
         uses: ./.github/actions/install-terraform-docs
         with:
           tfd_version: ${{ env.TFD_VERSION }}
+      
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: "testing"
 
       - name: Make docs
         run: |
