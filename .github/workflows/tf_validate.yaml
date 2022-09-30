@@ -58,7 +58,7 @@ jobs:
 
       - name: Make docs
         run: |
-          for item in */ ; do
+          for item in *; do
             if [ -d "${item}" ]; then
               /usr/local/terraform-docs markdown table --output-file ${{ env.OUTPUT_FILE }} --output-mode ${{ env.OUTPUT_MODE }} "$item"
             fi
