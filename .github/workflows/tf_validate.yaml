@@ -59,7 +59,9 @@ jobs:
       - name: Make docs
         run: |
           for item in */ ; do
+            cd "$item"
             /usr/local/terraform-docs markdown table --output-file ${{ env.OUTPUT_FILE }} --output-mode ${{ env.OUTPUT_MODE }} "$item"
+            cd ..
           done
 
       - name: Commit & Push changes

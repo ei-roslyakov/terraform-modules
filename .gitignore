@@ -55,4 +55,4 @@ terragrunt
 
 #common
 **/.DS_Store
-**/.terraform-docs.tar.gz
+**/terraform-docs.tar.gz
