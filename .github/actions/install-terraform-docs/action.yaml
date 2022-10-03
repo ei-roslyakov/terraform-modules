@@ -12,8 +12,8 @@ runs:
     - name: Installing TF Docs
       run: |
         curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/${{ inputs.tfd_version }}/terraform-docs-${{ inputs.tfd_version }}-$(uname)-amd64.tar.gz
-        tar -xzf terraform-docs.tar.gz
+        tar -xzf terraform-docs.tar.gz terraform-docs
         chmod +x terraform-docs
         sudo mv terraform-docs /usr/local/terraform-docs
+        rm terraform-docs.tar.gz
       shell: bash
-
