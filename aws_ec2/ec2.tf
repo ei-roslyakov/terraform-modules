@@ -70,7 +70,7 @@ resource "aws_instance" "default" {
   disable_api_termination              = var.disable_api_termination
   instance_initiated_shutdown_behavior = var.instance_initiated_shutdown_behavior
 
-  vpc_security_group_ids = var.security_group
+  vpc_security_group_ids = var.vpc_security_group_ids
 
   dynamic "root_block_device" {
     for_each = var.root_block_device
