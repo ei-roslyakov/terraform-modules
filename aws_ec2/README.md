@@ -5,9 +5,6 @@ module "ec2" {
   source = ""
 
   name                                = "Name for instance"
-  create_default_security_group       = false 
-  defaulf_sg_source_security_group_id = "SG id for source ingress role(if create_default_security_group = false not required)"
-  allowed_ports                       = ["80"] # (if create_default_security_group = false not required)
   instance_type                       = "t2.micro"
   ssh_key_pair                        = "key_name"
   monitoring                          = true
