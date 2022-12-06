@@ -53,9 +53,10 @@ variable "instance_initiated_shutdown_behavior" {
   type        = string
   default     = ""
 }
-variable "security_group" {
-  description = "List of Security Group IDs"
-  default     = []
+variable "vpc_security_group_ids" {
+  description = "A list of security group IDs to associate with"
+  type        = list(string)
+  default     = null
 }
 variable "disable_api_termination" {
   description = "Enable EC2 Instance Termination Protection"

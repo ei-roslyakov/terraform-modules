@@ -10,7 +10,7 @@ module "ec2" {
   monitoring                          = true
   vpc_id                              = "vpc_id"
   subnet_id                           = "subnet_id"
-  security_group                      = ["sg that will be attached to instance"]
+  vpc_security_group_ids              = ["sg that will be attached to instance"]
 
   root_block_device = [
     {
