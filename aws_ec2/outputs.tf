@@ -18,3 +18,11 @@ output "role" {
   description = "Name of AWS IAM Role associated with the instance"
   value       = join("", aws_iam_role.default.*.name)
 }
+output "public_ip" {
+  description = "Public IP of instance"
+  value       = join("", aws_instance.default.*.public_ip)
+}
+output "public_dns" {
+  description = "Public DNS of instance"
+  value       = join("", aws_instance.default.*.public_dns)
+}
