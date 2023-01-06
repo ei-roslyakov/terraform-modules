@@ -8,7 +8,7 @@ output "vpc_arn" {
 }
 output "vpc_cidr_block" {
   description = "VPC CIDR block"
-  value      = concat(aws_vpc.this.*.cidr_block, [""])[0]
+  value       = concat(aws_vpc.this.*.cidr_block, [""])[0]
 }
 output "private_subnets" {
   description = "List of IDs of private subnets"
