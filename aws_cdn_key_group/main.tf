@@ -9,3 +9,16 @@ resource "aws_cloudfront_key_group" "key_group" {
   items   = [aws_cloudfront_public_key.key.id]
   name    = var.key_group_name
 }
+
+resource "aws_secretsmanager_secret" "secret" {
+  count = var.create_pub_key_secret ? 1 : 0
+  name = var.secret_name
+}
+ 
+ 
+resource "aws_secretsmanager_secret_version" "secret_v" {
+  count = var.create_pub_key_secret ? 1 : 0
+
+  secret_id = aws_secretsmanager_secret.secret[0].id
+  secret_string = var.secret_string
+}
