@@ -6,8 +6,8 @@ resource "aws_security_group" "this" {
   dynamic "ingress" {
     for_each = var.ingress_rules
     content {
-      from_port       = lookup(ingress.value, "port", null)
-      to_port         = lookup(ingress.value, "port", null)
+      from_port       = lookup(ingress.value, "from_port", null)
+      to_port         = lookup(ingress.value, "to_port", null)
       protocol        = lookup(ingress.value, "protocol", null)
       description     = lookup(ingress.value, "description", null)
       cidr_blocks     = lookup(ingress.value, "cidr_blocks", null)

@@ -8,10 +8,11 @@ module "security_group" {
     vpc_id        = "vpc-id"
     ingress_rules = [
       {
-        port        = 80
-        protocol    = "tcp"
-        cidr_blocks = ["192.168.1.1/32", "192.168.1.2/32"]
-        description = "description-1"
+        from_port         = 80
+        to_port           = 80
+        protocol          = "tcp"
+        cidr_blocks       = ["192.168.1.1/32", "192.168.1.2/32"]
+        description       = "description-1"
       },
       {
         port        = 443
