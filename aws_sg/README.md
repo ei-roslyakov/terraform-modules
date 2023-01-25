@@ -6,7 +6,7 @@ module "security_group" {
 
     name          = "my-sg"
     vpc_id        = "vpc-id"
-    ingress_rules = {
+    ingress_rules = [
       {
         port        = 80
         protocol    = "tcp"
@@ -19,7 +19,7 @@ module "security_group" {
         security_groups = ["sg-id-1", "sg-id-2"]
         description = "description2"
       },
-    }
+    ]
 }
 ```
 
