@@ -3,9 +3,6 @@ name: Version Increment
 on:
   workflow_dispatch:
 
-  push:
-    branches: [master]
-
 jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
