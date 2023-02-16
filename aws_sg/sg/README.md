@@ -1,26 +1,33 @@
 ## Usage
 
 ```hcl
-module "security_group" {
-    source        = "../aws_sg"
-
-    name          = "my-sg"
-    vpc_id        = "vpc-id"
-    ingress_rules = [
-      {
-        from_port         = 80
-        to_port           = 80
-        protocol          = "tcp"
-        cidr_blocks       = ["192.168.1.1/32", "192.168.1.2/32"]
-        description       = "description-1"
-      },
-      {
-        port        = 443
-        protocol    = "tcp"
-        security_groups = ["sg-id-1", "sg-id-2"]
-        description = "description2"
-      },
-    ]
+inputs = {
+  groups = {
+    "${local.common.project}-sg" = {
+      name   = "${local.common.project}-sg"
+      vpc_id = dependency.data.outputs.aws_vpc_id
+      ingress_rules = [
+        {
+          from_port   = 22
+          to_port     = 22
+          protocol    = "tcp"
+          cidr_blocks = ["213.110.148.240/32"]
+          description = "allow ssh roslyakov"
+        },
+        {
+          from_port   = 13549
+          to_port     = 13549
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+          description = "allow https roslyakov"
+        }
+      ]
+      tags = {
+        Terraform   = "true"
+        Environment = "qa"
+      }
+    }
+  }
 }
 ```
 
