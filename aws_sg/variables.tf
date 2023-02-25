@@ -6,7 +6,7 @@ variable "groups" {
     vpc_id      = optional(string)
 
     ingress_rules = optional(any)
-    tags = optional(map(string))
+    tags          = optional(map(string))
   }))
   default = {}
 }

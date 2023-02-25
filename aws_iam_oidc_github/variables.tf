@@ -1,3 +1,15 @@
+variable "enabled" {
+  default     = true
+  description = "Flag to enable/disable the creation of resources."
+  type        = bool
+}
+
+variable "create_oidc_provider" {
+  default     = true
+  description = "Flag to enable/disable the creation of the GitHub OIDC provider."
+  type        = bool
+}
+
 variable "attach_admin_policy" {
   default     = false
   description = "Flag to enable/disable the attachment of the AdministratorAccess policy."

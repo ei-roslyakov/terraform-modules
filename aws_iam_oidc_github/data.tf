@@ -1,5 +1,5 @@
 locals {
-  oidc_provider_arn = data.aws_iam_openid_connect_provider.github.arn
+  oidc_provider_arn = var.enabled ? (var.create_oidc_provider ? aws_iam_openid_connect_provider.github.arn : data.aws_iam_openid_connect_provider.github[0].arn) : ""
 }
 
 data "aws_partition" "current" {}
@@ -34,6 +34,8 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 data "aws_iam_openid_connect_provider" "github" {
+  count = var.enabled && !var.create_oidc_provider ? 1 : 0
+
   url = "https://token.actions.githubusercontent.com"
 }
 
