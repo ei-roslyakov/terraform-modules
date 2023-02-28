@@ -6,6 +6,7 @@ variable "identitystore_user" {
     given_name   = optional(string)
     family_name  = optional(string)
     email        = optional(string)
+    primary_email = optional(bool)
   }))
   default = {}
 }
