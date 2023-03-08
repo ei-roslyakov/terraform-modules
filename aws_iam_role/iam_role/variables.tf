@@ -21,6 +21,12 @@ variable "principals_type" {
   description = "The principals type"
 }
 
+variable "description" {
+  type        = string
+  default     = ""
+  description = "(Optional) Description of the role."
+}
+
 variable "principals_identifiers" {
   type        = list(string)
   default     = ["ec2.amazonaws.com"]

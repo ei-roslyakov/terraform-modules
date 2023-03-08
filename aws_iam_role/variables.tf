@@ -3,9 +3,12 @@ variable "roles" {
   type = map(object({
     name                    = optional(string)
     path                    = optional(string)
-    instance_profile_enable = optional(bool)
+    description             = optional(string, "")
+    instance_profile_enable = optional(bool, true)
     policy_arns             = optional(list(string))
     custom_tags             = optional(map(string))
+    principals_type         = optional(string, "Service")
+    principals_identifiers  = optional(list(string), ["ec2.amazonaws.com"])
   }))
   default = {}
 }
