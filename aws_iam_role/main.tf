@@ -9,10 +9,10 @@ module "role" {
   policy_arns             = try(each.value["policy_arns"], [])
 
 
-  principals_type         = each.value["principals_type"]
-  principals_identifiers  = each.value["principals_identifiers"]
+  principals_type        = each.value["principals_type"]
+  principals_identifiers = each.value["principals_identifiers"]
 
-  description             = each.value["description"]
+  description = each.value["description"]
 
   tags = merge(merge(
     {
