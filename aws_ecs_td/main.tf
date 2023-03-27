@@ -23,6 +23,34 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   tags = var.tags
 }
 
+resource "aws_iam_policy" "additioanl_ecs_task_execution_policy" {
+  count = var.execution_role_arn == "" ? 1 : 0
+
+  name        = "${var.family}-ecs-task-execution-additioanl-policy"
+  path        = "/"
+  description = "Additional ecs-task-execution policy "
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "logs:CreateLogGroup",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "additioanl_ecs_task_execution_policy_attach" {
+  count = var.execution_role_arn == "" ? 1 : 0
+
+  role       = join("", aws_iam_role.ecs_task_execution_role.*.name)
+  policy_arn = join("", aws_iam_policy.additioanl_ecs_task_execution_policy.*.arn)
+}
+
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy_attach" {
   count = var.execution_role_arn == "" ? 1 : 0
 
