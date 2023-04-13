@@ -1,5 +1,5 @@
 locals {
-  ecs_task_execution_role_custom_policies = var.execution_role_arn == "" && length(var.ecs_task_execution_role_custom_policies) > 1 ? var.ecs_task_execution_role_custom_policies : []
+  ecs_task_execution_role_custom_policies = var.execution_role_arn == "" && length(var.ecs_task_execution_role_custom_policies) >= 1 ? var.ecs_task_execution_role_custom_policies : []
   partition                               = data.aws_partition.current.partition
 }
 
