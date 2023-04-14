@@ -8,18 +8,20 @@ inputs = {
       vpc_id = dependency.data.outputs.aws_vpc_id
       ingress_rules = [
         {
-          from_port   = 22
-          to_port     = 22
-          protocol    = "tcp"
-          cidr_blocks = ["213.110.148.240/32"]
-          description = "allow ssh roslyakov"
+          from_port       = 22
+          to_port         = 22
+          protocol        = "tcp"
+          cidr_blocks     = ["213.110.148.240/32"]
+          security_groups = []
+          description     = "allow ssh roslyakov"
         },
         {
-          from_port   = 13549
-          to_port     = 13549
-          protocol    = "tcp"
-          cidr_blocks = ["0.0.0.0/0"]
-          description = "allow https roslyakov"
+          from_port       = 13549
+          to_port         = 13549
+          protocol        = "tcp"
+          cidr_blocks     = ["0.0.0.0/0"]
+          security_groups = []
+          description     = "allow https roslyakov"
         }
       ]
       tags = {
