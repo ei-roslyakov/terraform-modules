@@ -51,3 +51,9 @@ variable "secret_binary" {
   description = "(Optional) Specifies binary data that you want to encrypt and store in this version of the secret. This is required if secret_string is not set. Needs to be encoded to base64."
   type        = string
 }
+
+variable "secret_binary" {
+  default     = ""
+  description = "(Optional) Specifies binary data that you want to encrypt and store in this version of the secret. This is required if secret_string is not set. Needs to be encoded to base64."
+  type        = string
+}
