@@ -21,4 +21,5 @@ resource "aws_secretsmanager_secret_version" "secret_v" {
 
   secret_id     = aws_secretsmanager_secret.secret[0].id
   secret_string = var.secret_string
+  secret_binary = var.secret_binary
 }
