@@ -20,6 +20,5 @@ resource "aws_secretsmanager_secret_version" "secret_v" {
   count = var.create_pub_key_secret ? 1 : 0
 
   secret_id     = aws_secretsmanager_secret.secret[0].id
-  secret_string = var.secret_string
   secret_binary = var.secret_binary
 }
