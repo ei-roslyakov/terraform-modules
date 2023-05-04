@@ -1,71 +1,31 @@
-locals {
-  untagged_image_rule = [{
-    rulePriority = length(var.protected_tags) + 1
-    description  = "Remove untagged images"
-    selection = {
-      tagStatus   = "untagged"
-      countType   = "imageCountMoreThan"
-      countNumber = 1
-    }
-    action = {
-      type = "expire"
-    }
-  }]
-
-  remove_old_image_rule = [{
-    rulePriority = length(var.protected_tags) + 2
-    description  = "Rotate images when reach ${var.max_image_count} images stored",
-    selection = {
-      tagStatus   = "any"
-      countType   = "imageCountMoreThan"
-      countNumber = var.max_image_count
-    }
-    action = {
-      type = "expire"
-    }
-  }]
-
-  protected_tag_rules = [
-    for index, tagPrefix in zipmap(range(length(var.protected_tags)), tolist(var.protected_tags)) :
-    {
-      rulePriority = tonumber(index) + 1
-      description  = "Protects images tagged with ${tagPrefix}"
-      selection = {
-        tagStatus     = "tagged"
-        tagPrefixList = [tagPrefix]
-        countType     = "imageCountMoreThan"
-        countNumber   = 999999
-      }
-      action = {
-        type = "expire"
-      }
-    }
-  ]
-}
-
 resource "aws_ecr_repository" "ecr_repo" {
-  for_each = toset(var.image_names)
+  for_each = var.images
 
-  name                 = each.value
-  image_tag_mutability = var.image_tag_mutability
+  name                 = each.value["name"]
+  image_tag_mutability = each.value["image_tag_mutability"]
 
   image_scanning_configuration {
-    scan_on_push = var.scan_images_on_push
+    scan_on_push = each.value["scan_on_push"]
   }
 
   tags = merge(
     {
-      "Name" = format("%s", each.value)
+      "Name" = format("%s", each.value["name"])
     },
     var.tags,
   )
 }
 
-resource "aws_ecr_lifecycle_policy" "ect_policy" {
-  for_each   = toset(var.image_names)
-  repository = aws_ecr_repository.ecr_repo[each.value].name
+module "lifecycle_policy" {
+  source = "./lifecycle_policy"
 
-  policy = jsonencode({
-    rules = concat(local.protected_tag_rules, local.untagged_image_rule, local.remove_old_image_rule)
-  })
+  for_each = {
+    for key, value in var.images :
+    key => value
+    if lookup(value, "lifecycle_policy", null) != null
+  }
+  aws_ecr_repository_name = aws_ecr_repository.ecr_repo[each.key].name
+
+  max_image_count = each.value["lifecycle_policy"]["max_image_count"]
+  protected_tags  = each.value["lifecycle_policy"]["protected_tags"]
 }

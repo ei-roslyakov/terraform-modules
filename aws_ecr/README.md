@@ -4,14 +4,24 @@
 module "aws_ecr" {
   source = ""
 
-  image_names = [
-    "r-image-dev",
-    "r-image-test",
-    "r-image-prod"
-  ]
+  images = {
+    "my-first-image" = {
+      name = "my-first-image"
+      scan_on_push = true
+    }
+    "my-second-image" = {
+      name = "my-second-image"
+      scan_on_push = true
+      lifecycle_policy = {
+        max_image_count = 50
+        protected_tags = ["prod"]
+      }
+    }
+  }
+
   tags = {
     Terraform   = "true"
-    Environment = "dev"
+    Environment = "prod"
   }
 }
 ```
