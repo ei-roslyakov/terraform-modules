@@ -12,7 +12,7 @@ module "aws_redis" {
   vpc_id                     = "vpc_id"
   subnet_ids                 = "subnets-ids"
   source_security_groups     = "source_security_groups"
-  allowed_cidr_blocks        = "192.168.1.0/24"
+  allowed_cidr_blocks        = ["192.168.1.0/24"]
   num_cache_nodes            = "1" # if cross-az should be more than 1
   az_mode                    = "single-az" # by default = "cross-az"
   tags                       = {
@@ -20,8 +20,10 @@ module "aws_redis" {
     Environment = "dev"
     Region      = "some rigion"
   }
-  tg_unhealthy_ok_actions    = "arn_sns_actions"
-  tg_unhealthy_alarm_actions = "arn_sns_actions"
+
+  enable_alerts               = true
+  tg_unhealthy_ok_actions     = "arn_sns_actions"
+  tg_unhealthy_alarm_actions  = "arn_sns_actions"
 }
 ```
 <!-- BEGIN_TF_DOCS -->

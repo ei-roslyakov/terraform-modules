@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_metric_alarm" "cache_memory" {
-  count = var.create_elasticache ? var.num_cache_nodes : 0
+  count = var.create_elasticache && var.enable_alerts ? var.num_cache_clusters : 0
 
   alarm_name          = "${element(local.elasticache_member_clusters, count.index)}-high-ram-utilization"
   evaluation_periods  = "1"
@@ -26,7 +26,8 @@ resource "aws_cloudwatch_metric_alarm" "cache_memory" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cache-cpuutil" {
-  count               = var.create_elasticache ? var.num_cache_nodes : 0
+  count = var.create_elasticache && var.enable_alerts ? var.num_cache_clusters : 0
+
   alarm_name          = "${element(local.elasticache_member_clusters, count.index)}-high-cpu-utilization"
   evaluation_periods  = "1"
   metric_name         = "CPUUtilization"
@@ -52,7 +53,7 @@ resource "aws_cloudwatch_metric_alarm" "cache-cpuutil" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "cache-swap" {
-  count               = var.create_elasticache ? var.num_cache_nodes : 0
+  count               = var.create_elasticache && var.enable_alerts ? var.num_cache_clusters : 0
   alarm_name          = "${element(local.elasticache_member_clusters, count.index)}-swapusage"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = "1"

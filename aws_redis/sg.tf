@@ -1,11 +1,13 @@
 resource "aws_security_group_rule" "ingress_security_groups" {
-  count                    = var.create_elasticache ? 1 : 0
+  for_each = toset(var.source_security_groups)
+
+
   description              = "Allow inbound traffic from existing Security Groups"
   type                     = "ingress"
   from_port                = var.elasticache_redis_port
   to_port                  = var.elasticache_redis_port
   protocol                 = "tcp"
-  source_security_group_id = var.source_security_groups
+  source_security_group_id = each.key
   security_group_id        = join("", aws_security_group.redis-sg.*.id)
 }
 
