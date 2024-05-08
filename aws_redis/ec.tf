@@ -8,7 +8,7 @@ resource "aws_elasticache_subnet_group" "redis_subnet_group" {
   count = var.create_elasticache ? 1 : 0
 
   name       = local.redis_subnet_group_tag_name
-  subnet_ids = var.subnets
+  subnet_ids = var.subnet_ids
 }
 
 resource "aws_elasticache_replication_group" "redis_replication_group" {
