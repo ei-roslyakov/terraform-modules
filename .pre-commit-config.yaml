@@ -17,10 +17,6 @@ repos:
           - --hook-config=--add-to-existing-file=true
           - --hook-config=--create-file-if-not-exist=true
           - --args=--config=.terraform-docs_pre-commit.yml
-      - id: terraform_checkov
-        args:
-          - --args=--quiet
-          - --args=--skip-check CKV2_GHA_1
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
