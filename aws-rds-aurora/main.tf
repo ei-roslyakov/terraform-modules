@@ -173,4 +173,3 @@ resource "aws_db_parameter_group" "default" {
     create_before_destroy = true
   }
 }
-

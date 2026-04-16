@@ -10,4 +10,3 @@ resource "aws_route53_record" "alias_record" {
     evaluate_target_health = var.evaluate_target_health
   }
 }
-

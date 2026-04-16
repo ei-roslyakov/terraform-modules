@@ -116,7 +116,7 @@ resource "aws_route_table" "private" {
 resource "aws_eip" "nat" {
   count = var.create_vpc && var.enable_nat_gateway == true ? local.nat_gateway_count : 0
 
-  vpc = true
+  domain = "vpc"
 
   tags = merge(
     {

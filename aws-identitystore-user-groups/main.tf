@@ -28,4 +28,3 @@ resource "aws_identitystore_group_membership" "group_association" {
   group_id  = aws_identitystore_group.group["${each.value.group}"].group_id
   member_id = aws_identitystore_user.user["${each.value.user}"].user_id
 }
-
