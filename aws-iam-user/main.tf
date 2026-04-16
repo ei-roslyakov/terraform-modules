@@ -1,7 +1,7 @@
 module "user" {
   for_each = var.users
 
-  source                 = "./iam_user"
+  source                 = "./iam-user"
   name                   = try(each.value["name"], each.key)
   path                   = try(each.value["path"], "/")
   permissions_boundary   = try(each.value["permissions_boundary"], null)

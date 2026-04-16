@@ -2,7 +2,7 @@ module "record" {
 
   for_each = var.records
 
-  source = "./aws_record"
+  source = "./aws-record"
 
   zone_id         = try(each.value["zone_id"], "")
   name            = try(each.value["name"], each.key)

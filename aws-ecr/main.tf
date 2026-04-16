@@ -17,7 +17,7 @@ resource "aws_ecr_repository" "ecr_repo" {
 }
 
 module "lifecycle_policy" {
-  source = "./lifecycle_policy"
+  source = "./lifecycle-policy"
 
   for_each = {
     for key, value in var.images :

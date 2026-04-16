@@ -2,7 +2,7 @@ module "role" {
 
   for_each = var.roles
 
-  source = "./iam_role"
+  source = "./iam-role"
 
   name                    = try("${each.value["name"]}", "${each.key}")
   instance_profile_enable = each.value["instance_profile_enable"]
