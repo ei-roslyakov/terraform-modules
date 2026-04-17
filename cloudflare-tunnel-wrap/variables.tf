@@ -36,6 +36,7 @@ variable "warp_hosts" {
   type = map(object({
     ip             = string
     ports          = optional(list(number), [])
+    service        = optional(string, "")
     no_tls_verify  = optional(bool, false)
     description    = optional(string, "")
     allowed_emails = optional(set(string), [])

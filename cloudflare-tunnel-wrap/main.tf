@@ -108,7 +108,7 @@ resource "cloudflare_zero_trust_access_policy" "warp_host" {
 # Private (WARP) hosts — Access Applications (protect with login)
 # ------------------------------------------------------------------------------
 resource "cloudflare_zero_trust_access_application" "warp_host" {
-  for_each = var.warp_hosts
+  for_each = { for k, v in var.warp_hosts : k => v if !contains(keys(var.public_services), k) }
 
   account_id = var.account_id
   type       = "self_hosted"
@@ -154,11 +154,11 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "this" {
       [
         for subdomain, host in var.warp_hosts : {
           hostname = "${subdomain}.${var.zone}"
-          service  = "tcp://${cidrhost(host.ip, 0)}:${length(host.ports) > 0 ? host.ports[0] : 443}"
+          service  = host.service != "" ? host.service : "tcp://${cidrhost(host.ip, 0)}:${length(host.ports) > 0 ? host.ports[0] : 443}"
           origin_request = host.no_tls_verify ? {
             no_tls_verify = true
           } : null
-        }
+        } if !contains(keys(var.public_services), subdomain)
       ],
       [{ service = "http_status:404" }]
     )
@@ -282,7 +282,6 @@ resource "cloudflare_zero_trust_access_application" "warp" {
   session_duration          = var.warp_session_duration
   auto_redirect_to_identity = var.warp_auto_redirect_to_identity
   allowed_idps              = length(var.warp_allowed_idps) > 0 ? var.warp_allowed_idps : null
-  app_launcher_visible      = var.warp_app_launcher_visible
   logo_url                  = var.warp_logo_url != "" ? var.warp_logo_url : null
   custom_deny_message       = var.warp_custom_deny_message != "" ? var.warp_custom_deny_message : null
   custom_deny_url           = var.warp_custom_deny_url != "" ? var.warp_custom_deny_url : null
