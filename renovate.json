@@ -1,0 +1,10 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "Group all Terraform provider updates across modules into one PR",
+      "matchManagers": ["terraform"],
+      "groupName": "terraform-providers"
+    }
+  ]
+}
